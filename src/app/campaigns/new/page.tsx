@@ -1,0 +1,118 @@
+"use client";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle, } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea"
+import { Label } from "@/components/ui/label";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Loader2, AlertCircle } from "lucide-react";
+import { useForm } from "@/hooks/useForm";
+import factory from "../../../../ethereum/factory";
+import web3 from "../../../../ethereum/web3";
+
+function CreateCampaign() {
+
+  const onSubmit = async (values: any) => {
+    let accounts = await web3.eth.getAccounts();
+    await factory.methods.createCampaign(
+      values.name,
+      values.description,
+      values.img,
+      values.minimumContribution).send(
+        {
+          from: accounts[0],
+          // gas: "1000000" no need to specify gas, it will be automatically calculated bu metamask
+        });
+  };
+
+
+  const { values, errors, isSubmitting, submitError, handleChange, handleSubmit } = useForm({
+    initialValues: {
+      name: "",
+      description: "",
+      img: "",
+      minimumContribution: "",
+    },
+    onSubmit,
+    redirect: "/",
+  });
+
+  const { name, description, img, minimumContribution } = values;
+  const { nameError, descriptionError, imgError, minimumContributionError } = errors;
+
+  return (
+    <Card className="dark:bg-zinc-900">
+      <CardHeader>
+        <CardTitle className="text-center">Create Campaign</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <form onSubmit={handleSubmit}>
+          <div className="grid w-full items-center gap-4">
+            <div className="flex flex-col space-y-1.5">
+              <Label htmlFor="campaign-name" className="font-semibold">Campaign Name</Label>
+              <Input
+                id="campaign-name"
+                className="dark:bg-zinc-800 focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:border-b focus-visible:border-zinc-500 focus-visible:border-2"
+                name="name"
+                value={name}
+                onChange={handleChange} />
+            </div>
+            <div className="flex flex-col space-y-1.5">
+              <Label htmlFor="campaign-description" className="font-semibold">Campaign Description</Label>
+              <Textarea
+                id="campaign-description"
+                className="dark:bg-zinc-800 focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:border-b focus-visible:border-zinc-500 focus-visible:border-2"
+                name="description"
+                value={description}
+                onChange={handleChange}
+              />
+            </div>
+            <div className="flex flex-col space-y-1.5">
+              <Label htmlFor="campaign-img" className="font-semibold">Campaign Image URL</Label>
+              <Input
+                id="campaign-img"
+                className="dark:bg-zinc-800 focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:border-b focus-visible:border-zinc-500 focus-visible:border-2"
+                name="img"
+                value={img}
+                onChange={handleChange} />
+            </div>
+            <div className="flex flex-col space-y-1.5">
+              <Label htmlFor="minimum-contribution" className="font-semibold">Minimum Contribution</Label>
+              <div className="flex">
+                <Input
+                  id="minimum-contribution"
+                  className="outline-none dark:bg-zinc-800 rounded-r-none border-r-0 focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:border-b focus-visible:border-zinc-500 focus-visible:border-2"
+                  name="minimumContribution"
+                  value={minimumContribution}
+                  onChange={handleChange} />
+                <Button type="button" disabled className="disabled:opacity-100 rounded-l-none">wei</Button>
+              </div>
+            </div>
+          </div>
+          {
+            isSubmitting ?
+              <Button disabled className="my-4">
+                Creating campaign in progress <Loader2 className="animate-spin" />
+              </Button>
+              :
+              <Button type="submit" className="my-4">
+                Create Campaign
+              </Button>
+          }
+        </form>
+      </CardContent>
+      <CardFooter>
+        {submitError &&
+          <Alert variant="destructive">
+            <AlertCircle className="h-4 w-4" />
+            <AlertTitle>Error</AlertTitle>
+            <AlertDescription>
+              Somthing went wrong while creating campaign
+            </AlertDescription>
+          </Alert>}
+      </CardFooter>
+    </Card>
+  );
+}
+
+export default CreateCampaign;
