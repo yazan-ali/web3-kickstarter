@@ -1,16 +1,17 @@
-import type { Metadata } from "next";
-import { createCampaign } from '../../../../ethereum/campaign';
+import { getCampaign } from '../../../../ethereum/campaign';
 import Campaign from "@/components/Campaign";
+
+export const dynamic = 'force-dynamic';
 
 async function CampaignPage({ params }: { params: Promise<{ address: string }> }) {
 
     const address = (await params).address;
-    let campaingDetails;
 
     try {
-        let campaing = createCampaign(address);
-        let result = await campaing.methods.getDetails().call();
-        campaingDetails = {
+        let campaign = getCampaign(address);
+        let result = await campaign.methods.getDetails().call();
+        let campaignDetails = {
+            address: address,
             name: result[0],
             description: result[1],
             img: result[2],
@@ -20,13 +21,13 @@ async function CampaignPage({ params }: { params: Promise<{ address: string }> }
             approversCount: result[6],
             manager: result[7],
         }
+
+        return (
+            <Campaign campaignDetails={campaignDetails} />
+        )
     } catch (err) {
         console.log(err);
     }
-
-    return (
-        <Campaign campaign={campaingDetails} />
-    )
 }
 
 export default CampaignPage;

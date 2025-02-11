@@ -6,16 +6,14 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator"
 import Image from "next/image";
-import web3 from "../../ethereum/web3";
 import StatCard from "./StateCard";
-
+import ContributionForm from "./ContributionForm";
+import web3 from "../../ethereum/web3";
 interface CampaignProps {
-    campaign: {
+    campaignDetails: {
+        address: string;
         name: string;
         description: string;
         img: string;
@@ -27,29 +25,29 @@ interface CampaignProps {
     } | undefined;
 }
 
-function Campaign({ campaign }: CampaignProps) {
-    if (!campaign) return;
+function Campaign({ campaignDetails }: CampaignProps) {
+    if (!campaignDetails) return;
 
     return (
         <div className="mb-10">
             <Card className="flex flex-col lg:flex-row shadow-xl rounded-2xl">
                 <CardHeader className="flex flex-col lg:w-2/4">
                     <CardTitle>
-                        <h1>{campaign.name}</h1>
+                        <h1>{campaignDetails.name}</h1>
                     </CardTitle>
                     <CardDescription className="break-words">
-                        The owener of this campaign is {campaign.manager}
+                        The owener of this campaign is {campaignDetails.manager}
                     </CardDescription>
                     <div className="py-4">
                         <Image
-                            src={campaign.img}
-                            alt={campaign.name}
+                            src={campaignDetails.img}
+                            alt={campaignDetails.name}
                             width={600}
                             height={600}
                             className="rounded-lg shadow-md"
                         />
                     </div>
-                    <CardDescription className="text-center lg:text-start">{campaign?.description}</CardDescription>
+                    <CardDescription className="text-center lg:text-start">{campaignDetails.description}</CardDescription>
                 </CardHeader>
                 <div className="my-4">
                     <Separator orientation="vertical" />
@@ -59,26 +57,25 @@ function Campaign({ campaign }: CampaignProps) {
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <StatCard
-                                // title={web3.utils.fromWei(campaign.balance, " ether")}
-                                title={campaign.balance}
+                                title={web3.utils.fromWei(campaignDetails.balance, "ether")}
                                 meta="Campaign Balance (ether)"
                                 description="The balance is how much money this campaign has left to spend."
                                 className="bg-blue-100 dark:bg-blue-900/50"
                             />
                             <StatCard
-                                title={campaign.minimumContribution}
+                                title={campaignDetails.minimumContribution}
                                 meta="Minimum Contribution (wei)"
                                 description="You must contribute at least this much wei to become an approver."
                                 className="bg-violet-100 dark:bg-violet-900/50"
                             />
                             <StatCard
-                                title={campaign.requestsCount}
+                                title={campaignDetails.requestsCount}
                                 meta="Number of Requests"
                                 description="A request tries to withdraw money from the contract. Requests must be approved by approvers."
                                 className="bg-sky-100 dark:bg-sky-900/50"
                             />
                             <StatCard
-                                title={campaign.approversCount}
+                                title={campaignDetails.approversCount}
                                 meta="Number of Approvers"
                                 description="Number of people who have already contributed to this campaign."
                                 className="bg-indigo-100 dark:bg-indigo-900/50"
@@ -96,34 +93,7 @@ function Campaign({ campaign }: CampaignProps) {
                                 </CardTitle>
                             </CardHeader>
                             <CardContent>
-                                <form>
-                                    <div className="grid w-full items-center gap-4">
-                                        <div className="flex flex-col space-y-1.5">
-                                            <Label htmlFor="contribution" className="font-semibold">Contribution Amount</Label>
-                                            <div className="flex">
-                                                <Input
-                                                    id="contribution"
-                                                    className="outline-none dark:bg-zinc-800 rounded-r-none border-r-0 focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:border-b focus-visible:border-zinc-500 focus-visible:border-2"
-                                                    name="contribution"
-                                                // value={contribution}
-                                                // onChange={handleChange}
-                                                />
-                                                <Button type="button" disabled className="disabled:opacity-100 rounded-l-none">wei</Button>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    {
-                                        false ?
-                                            <Button disabled className="my-4">
-                                                {/* Creating campaign in progress <Loader2 className="animate-spin" /> */}
-                                            </Button>
-                                            :
-                                            <Button type="submit" className="my-4">
-                                                Contribute
-                                            </Button>
-                                    }
-                                </form>
+                                <ContributionForm address={campaignDetails.address} />
                             </CardContent>
                         </div>
                     </CardFooter>

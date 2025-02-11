@@ -1,7 +1,7 @@
 import web3 from "./web3";
 import Campaign from './build/Campaign.json';
 
-const createCampaign = (address) => {
+const getCampaign = (address) => {
     let campaign = new web3.eth.Contract(
         JSON.parse(Campaign.interface),
         address
@@ -10,4 +10,4 @@ const createCampaign = (address) => {
     return campaign;
 }
 
-export { createCampaign };
+export { getCampaign };
