@@ -1,7 +1,6 @@
-import web3 from '../../ethereum/web3';
-import factory from "../../ethereum/factory";
+import factory from "@ethereum//factory";
 import CampaignsList from '@/components/CampaignsList';
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 import { CirclePlus } from 'lucide-react';
 import Link from 'next/link';
 

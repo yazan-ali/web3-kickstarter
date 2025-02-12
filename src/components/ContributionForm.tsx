@@ -5,8 +5,8 @@ import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Loader2, AlertCircle } from "lucide-react";
 import { useForm } from "@/hooks/useForm";
-import web3 from "../../ethereum/web3";
-import { getCampaign } from "../../ethereum/campaign";
+import web3 from "@ethereum/web3";
+import { getCampaign } from "@ethereum/campaign";
 import { useRouter } from "next/navigation";
 
 interface ContributionFormProps {

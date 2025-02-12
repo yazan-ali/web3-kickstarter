@@ -5,6 +5,7 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
 
@@ -23,7 +24,9 @@ function CampaignsList({ campaigns }: { campaigns: string[] }) {
                                 <p className="break-words">{address}</p>
                             </CardContent>
                             <CardFooter>
-                                <Link className="transition-colors hover:text-foreground/80 text-foreground/60" href={`/campaigns/${address}`}>View Campaign</Link>
+                                <Button>
+                                    <Link href={`/campaigns/${address}`}>View Campaign</Link>
+                                </Button>
                             </CardFooter>
                         </Card>
                     )

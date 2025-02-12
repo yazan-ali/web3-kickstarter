@@ -1,4 +1,4 @@
-import { getCampaign } from '../../../../ethereum/campaign';
+import { getCampaign } from '@ethereum/campaign';
 import Campaign from "@/components/Campaign";
 
 export const dynamic = 'force-dynamic';

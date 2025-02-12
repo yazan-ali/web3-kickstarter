@@ -6,11 +6,13 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator"
 import Image from "next/image";
 import StatCard from "./StateCard";
 import ContributionForm from "./ContributionForm";
-import web3 from "../../ethereum/web3";
+import web3 from "@ethereum/web3";
+import Link from "next/link";
 interface CampaignProps {
     campaignDetails: {
         address: string;
@@ -27,6 +29,33 @@ interface CampaignProps {
 
 function Campaign({ campaignDetails }: CampaignProps) {
     if (!campaignDetails) return;
+
+    let stateCards = [
+        {
+            title: web3.utils.fromWei(campaignDetails.balance, "ether"),
+            meta: "Campaign Balance (ether)",
+            description: "The balance is how much money this campaign has left to spend.",
+            className: "bg-blue-100 dark:bg-blue-900/50"
+        },
+        {
+            title: campaignDetails.minimumContribution,
+            meta: "Minimum Contribution (wei)",
+            description: "You must contribute at least this much wei to become an approver.",
+            className: "bg-violet-100 dark:bg-violet-900/50"
+        },
+        {
+            title: campaignDetails.requestsCount,
+            meta: "Number of Requests",
+            description: "A request tries to withdraw money from the contract. Requests must be approved by approvers.",
+            className: "bg-sky-100 dark:bg-sky-900/50"
+        },
+        {
+            title: campaignDetails.approversCount,
+            meta: "Number of Approvers",
+            description: "Number of people who have already contributed to this campaign",
+            className: "bg-indigo-100 dark:bg-indigo-900/50"
+        },
+    ];
 
     return (
         <div className="mb-10">
@@ -56,31 +85,17 @@ function Campaign({ campaignDetails }: CampaignProps) {
                     <CardContent>
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <StatCard
-                                title={web3.utils.fromWei(campaignDetails.balance, "ether")}
-                                meta="Campaign Balance (ether)"
-                                description="The balance is how much money this campaign has left to spend."
-                                className="bg-blue-100 dark:bg-blue-900/50"
-                            />
-                            <StatCard
-                                title={campaignDetails.minimumContribution}
-                                meta="Minimum Contribution (wei)"
-                                description="You must contribute at least this much wei to become an approver."
-                                className="bg-violet-100 dark:bg-violet-900/50"
-                            />
-                            <StatCard
-                                title={campaignDetails.requestsCount}
-                                meta="Number of Requests"
-                                description="A request tries to withdraw money from the contract. Requests must be approved by approvers."
-                                className="bg-sky-100 dark:bg-sky-900/50"
-                            />
-                            <StatCard
-                                title={campaignDetails.approversCount}
-                                meta="Number of Approvers"
-                                description="Number of people who have already contributed to this campaign."
-                                className="bg-indigo-100 dark:bg-indigo-900/50"
-                            />
+                            {
+                                stateCards.map((card, index) => (
+                                    <StatCard key={index} {...card} />
+                                ))
+                            }
                         </div>
+                        <Link href={`/campaigns/${campaignDetails.address}/requests`}>
+                            <Button className=" w-full mt-4">
+                                View Requests
+                            </Button>
+                        </Link>
                     </CardContent>
                     <CardFooter className="flex-col w-full text-start">
                         <Separator className="my-4" />
@@ -98,8 +113,8 @@ function Campaign({ campaignDetails }: CampaignProps) {
                         </div>
                     </CardFooter>
                 </div>
-            </Card>
-        </div>
+            </Card >
+        </div >
     )
 }
 
