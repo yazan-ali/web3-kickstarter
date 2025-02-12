@@ -1,25 +1,31 @@
-pragma solidity ^0.4.17;
+// SPDX-License-Identifier: MIT
+
+pragma solidity ^0.8.9;
 
 contract CampaignFactory {
-    address[] public deployedCampaigns;
+    address payable[] public deployedCampaigns;
 
     function createCampaign(
-        string name,
-        string description,
-        string img,
+        string memory name,
+        string memory description,
+        string memory img,
         uint minimum
     ) public {
-        address newCampaign = new Campaign(
+        Campaign newCampaign = new Campaign(
             name,
             description,
             img,
             minimum,
             msg.sender
         );
-        deployedCampaigns.push(newCampaign);
+        deployedCampaigns.push(payable(address(newCampaign)));
     }
 
-    function getDeployedCampaigns() public view returns (address[]) {
+    function getDeployedCampaigns()
+        public
+        view
+        returns (address payable[] memory)
+    {
         return deployedCampaigns;
     }
 }
@@ -44,17 +50,17 @@ contract Campaign {
     uint public approversCount;
 
     modifier restricted() {
-        require(msg.sender == manager);
+        require(msg.sender == manager, "Only manager can call this function");
         _;
     }
 
-    function Campaign(
-        string campaignName,
-        string campaignDescription,
-        string campaignImg,
+    constructor(
+        string memory campaignName,
+        string memory campaignDescription,
+        string memory campaignImg,
         uint minimum,
         address creator
-    ) public {
+    ) {
         manager = creator;
         name = campaignName;
         description = campaignDescription;
@@ -63,37 +69,35 @@ contract Campaign {
     }
 
     function contribute() public payable {
-        require(msg.value > minimumContribution);
+        require(
+            msg.value > minimumContribution,
+            "Contribution is less than minimum"
+        );
 
         if (!approvers[msg.sender]) {
             approvers[msg.sender] = true;
             approversCount++;
         }
-        // approvers[msg.sender] = true;
-        // approversCount++;
     }
 
     function createRequest(
-        string requestDescription,
+        string memory requestDescription,
         uint value,
         address recipient
     ) public restricted {
-        Request memory newRequest = Request({
-            description: requestDescription,
-            value: value,
-            recipient: recipient,
-            complete: false,
-            approvalCount: 0
-        });
-
-        requests.push(newRequest);
+        Request storage newRequest = requests.push();
+        newRequest.description = requestDescription;
+        newRequest.value = value;
+        newRequest.recipient = recipient;
+        newRequest.complete = false;
+        newRequest.approvalCount = 0;
     }
 
     function approveRequest(uint index) public {
         Request storage request = requests[index];
 
-        require(approvers[msg.sender]);
-        require(!request.approvals[msg.sender]);
+        require(approvers[msg.sender], "Only approvers can approve");
+        require(!request.approvals[msg.sender], "Request already approved");
 
         request.approvals[msg.sender] = true;
         request.approvalCount++;
@@ -102,17 +106,29 @@ contract Campaign {
     function finalizeRequest(uint index) public restricted {
         Request storage request = requests[index];
 
-        require(request.approvalCount > (approversCount / 2));
-        require(!request.complete);
+        require(
+            request.approvalCount > (approversCount / 2),
+            "Not enough approvals"
+        );
+        require(!request.complete, "Request already finalized");
 
-        request.recipient.transfer(request.value);
+        payable(request.recipient).transfer(request.value);
         request.complete = true;
     }
 
     function getDetails()
         public
         view
-        returns (string, string, string, uint, uint, uint, uint, address)
+        returns (
+            string memory,
+            string memory,
+            string memory,
+            uint,
+            uint,
+            uint,
+            uint,
+            address
+        )
     {
         return (
             name,
