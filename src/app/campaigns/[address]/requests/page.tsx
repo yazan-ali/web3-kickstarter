@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { getCampaign } from '@ethereum/campaign';
+import { Toaster } from "@/components/ui/toaster"
 import { Button } from "@/components/ui/button";
 import { CirclePlus } from 'lucide-react';
 import { useParams } from 'next/navigation'
@@ -104,6 +105,7 @@ function RequestsPage() {
                     </Button>
                 </div>
             )}
+            <Toaster />
         </div>
     );
 }

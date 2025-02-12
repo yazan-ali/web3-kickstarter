@@ -3,6 +3,7 @@ import {
     TableCell,
     TableRow,
 } from "@/components/ui/table";
+import { useToast } from "@/hooks/use-toast"
 import web3 from '@ethereum/web3';
 import { getCampaign } from '@ethereum/campaign';
 import { useParams } from 'next/navigation'
@@ -19,6 +20,8 @@ function RequestRow({ request, requestNumber, approversCount }: RequestRowProps)
     const params = useParams();
     const { address } = params;
 
+    const { toast } = useToast();
+
     const [approvalCount, setApprovalCount] = useState(Number(request.approvalCount));
     const [isCompleted, setIsCompleted] = useState(request.complete);
     const [isApproveRequestLoading, setIsApproveRequestLoading] = useState(false);
@@ -30,10 +33,17 @@ function RequestRow({ request, requestNumber, approversCount }: RequestRowProps)
             let accounts = await web3.eth.getAccounts();
             let campaign = getCampaign(address);
             await campaign.methods.approveRequest(requestNumber - 1).send({ from: accounts[0] });
-            // await new Promise((resolve, reject) => setTimeout(resolve, 3000));
             setApprovalCount((prev: number) => prev + 1);
+            toast({
+                title: "Request Approved",
+                description: "You have successfully approved the request",
+            });
         } catch (error: any) {
-            console.error(error);
+            toast({
+                title: "Approval Failed",
+                description: "Failed to approve the request",
+                variant: "destructive"
+            });
         } finally {
             setIsApproveRequestLoading(false);
         };
@@ -45,17 +55,24 @@ function RequestRow({ request, requestNumber, approversCount }: RequestRowProps)
             let accounts = await web3.eth.getAccounts();
             const campaign = getCampaign(address);
             await campaign.methods.finalizeRequest(requestNumber - 1).send({ from: accounts[0] });
-            // await new Promise((resolve, reject) => setTimeout(resolve, 3000));
             setIsCompleted(true);
+            toast({
+                title: "Request Finalized",
+                description: "You have successfully finalized the request",
+            });
         } catch (error: any) {
-            console.error(error);
+            toast({
+                title: "Finalization Failed",
+                description: "Failed to finalize the request",
+                variant: "destructive"
+            });
         } finally {
             setIsFinalizeRequestLoading(false);
         }
     };
 
     return (
-        <TableRow>
+        <TableRow className={`${isCompleted ? "opacity-50" : ""}`}>
             <TableCell className="font-medium">{requestNumber}</TableCell>
             <TableCell>{request.description}</TableCell>
             <TableCell>{web3.utils.fromWei(request.value, "ether")}</TableCell>
@@ -64,14 +81,18 @@ function RequestRow({ request, requestNumber, approversCount }: RequestRowProps)
             <TableCell>
                 <RequestApproveBtn
                     handleRequestApprove={handleRequestApprove}
+                    address={address}
+                    isCompleted={isCompleted}
                     isLoading={isApproveRequestLoading}
                 />
             </TableCell>
             <TableCell>
                 <RequestFinalizeBtn
                     handleFinalizeRequest={handleFinalizeRequest}
-                    isComplete={isCompleted}
+                    address={address}
+                    isCompleted={isCompleted}
                     isLoading={isFinalizeRequestLoading}
+                    canFinalize={request.approvalCount > approversCount / 2}
                 />
             </TableCell>
         </TableRow>
