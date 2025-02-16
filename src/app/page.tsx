@@ -5,12 +5,10 @@ import Link from "next/link";
 import startup from "../../public/startup.svg";
 import { Card, CardContent } from "@/components/ui/card";
 import { ArrowRight, Sparkles, Shield, Globe, Lock } from "lucide-react";
-import CampaignCarousel from "@/components/CampaignCarousel";
+import CampaignCarouselSection from "@/components/CampaignCarouselSection";
 
-export default async function Home() {
+export default function Home() {
   try {
-    const campaigns = await factory.methods.getDeployedCampaigns().call();
-
     return (
       <div className="w-full overflow-x-hidden">
         <section className="min-h-screen flex flex-col items-center text-center px-4 -mt-6 dark:from-zinc-950 dark:to-zinc-900">
@@ -123,7 +121,7 @@ export default async function Home() {
             <h2 className="text-4xl font-bold text-center mb-16 dark:text-white">
               Featured Campaigns
             </h2>
-            <CampaignCarousel campaigns={campaigns.slice(0, 5)} />
+            <CampaignCarouselSection />
           </div>
         </section>
 
