@@ -1,6 +1,12 @@
 import Web3 from "web3";
 
-let web3;
+declare global {
+    interface Window {
+        ethereum: any;
+    }
+}
+
+let web3: any;
 
 if (typeof window !== "undefined" && typeof window.ethereum !== "undefined") {
     // We are in the browser and metamask is running.
@@ -9,7 +15,7 @@ if (typeof window !== "undefined" && typeof window.ethereum !== "undefined") {
 } else {
     // We are on the server or the user is not running metamask
     const provider = new Web3.providers.HttpProvider(
-        process.env.NEXT_PUBLIC_SEPOLIA_INFURA_URL
+        process.env.NEXT_PUBLIC_SEPOLIA_INFURA_URL || ""
     );
     web3 = new Web3(provider);
 }

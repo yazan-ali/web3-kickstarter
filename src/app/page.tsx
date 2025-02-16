@@ -12,8 +12,8 @@ export default async function Home() {
     const campaigns = await factory.methods.getDeployedCampaigns().call();
 
     return (
-      <div className="w-full px-4 overflow-x-hidden">
-        <section className="min-h-screen flex flex-col items-center text-center -mt-6 dark:from-zinc-950 dark:to-zinc-900">
+      <div className="w-full overflow-x-hidden">
+        <section className="min-h-screen flex flex-col items-center text-center px-4 -mt-6 dark:from-zinc-950 dark:to-zinc-900">
           <div className="max-w-4xl mx-auto">
             <Image
               src={startup}

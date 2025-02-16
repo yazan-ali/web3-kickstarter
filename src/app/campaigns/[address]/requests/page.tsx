@@ -42,7 +42,7 @@ function RequestsPage() {
       try {
         setLoading(true);
         setError(null);
-        const campaign = getCampaign(address);
+        const campaign = getCampaign(address as string);
 
         const requestsCount = await fetchWithRetry(() =>
           campaign.methods.getRequestsCount().call()

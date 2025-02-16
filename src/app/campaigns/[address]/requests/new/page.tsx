@@ -23,7 +23,7 @@ function CreateRequestForm() {
   const { address } = params;
 
   const onSubmit = async (values: any) => {
-    let campaign = getCampaign(address);
+    let campaign = getCampaign(address as string);
     let accounts = await web3.eth.getAccounts();
     await campaign.methods
       .createRequest(
