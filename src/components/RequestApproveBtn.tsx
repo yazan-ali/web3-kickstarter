@@ -17,14 +17,14 @@ function RequestApproveBtn({
   isCompleted,
   isLoading,
 }: RequestApproveBtnProps) {
-  const [didApprove, setDidApprove] = useState(false);
+  const [canApprove, setCanApprove] = useState(false);
 
   useEffect(() => {
     const isApprover = async () => {
       let campaign = getCampaign(address);
       let accounts = await web3.eth.getAccounts();
-      let didApprove = await campaign.methods.approvers(accounts[0]).call();
-      setDidApprove(didApprove);
+      let canApprove = await campaign.methods.approvers(accounts[0]).call();
+      setCanApprove(canApprove);
     };
     isApprover();
   }, []);
@@ -40,7 +40,7 @@ function RequestApproveBtn({
           onClick={handleRequestApprove}
           type="button"
           className="bg-green-700"
-          disabled={didApprove || isCompleted}
+          disabled={!canApprove || isCompleted}
         >
           Approve
         </Button>
