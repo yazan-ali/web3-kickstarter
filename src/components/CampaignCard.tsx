@@ -42,14 +42,14 @@ function CampaignCard({ address }: { address: string }) {
   return (
     <Card
       key={campaignDetails.address}
-      className="overflow-hidden mx-auto dark:bg-zinc-900"
+      className="md:w-3/4 overflow-hidden mx-auto dark:bg-zinc-900"
     >
       <Image
         src={campaignDetails.img}
         alt={`Campaign ${campaignDetails.name}`}
         className="w-full"
-        width={300}
-        height={300}
+        width={1000}
+        height={600}
       />
       <CardContent className="p-6">
         <h3 className="text-xl font-bold mb-2 dark:text-white">

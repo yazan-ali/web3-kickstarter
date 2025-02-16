@@ -6,10 +6,17 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
+.container {
+  @media (width >=640px) {
+    padding: 0 16px !important;
+  }
+}
+
 .lucide.lucide-menu {
   width: 24px;
   height: 24px;
 }
+
 
 @layer base {
   :root {

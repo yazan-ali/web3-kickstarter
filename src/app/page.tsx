@@ -50,7 +50,7 @@ export default async function Home() {
           </div>
         </section>
 
-        <section className="pb-24 bg-white dark:bg-background">
+        <section className="py-24 bg-white dark:bg-background">
           <div className="max-w-6xl mx-auto">
             <h2 className="text-4xl font-bold text-center mb-16 dark:text-white">
               Why Choose Us?

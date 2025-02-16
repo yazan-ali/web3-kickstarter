@@ -53,8 +53,8 @@ function CampaignsList() {
             <Image
               src={campaign.img}
               alt={campaign.name}
-              width={192}
-              height={192}
+              width={1000}
+              height={600}
               className="w-full md:w-2/4"
             />
             <CardContent className="flex-1 p-4">
