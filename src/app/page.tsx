@@ -11,7 +11,7 @@ export default function Home() {
   try {
     return (
       <div className="w-full overflow-x-hidden">
-        <section className="min-h-screen flex flex-col items-center text-center px-4 -mt-6 dark:from-zinc-950 dark:to-zinc-900">
+        <section className="min-h-screen flex flex-col justify-center items-center text-center px-4 -mt-6 dark:from-zinc-950 dark:to-zinc-900">
           <div className="max-w-4xl mx-auto">
             <Image
               src={startup}
@@ -28,9 +28,9 @@ export default function Home() {
               Launch your dreams with blockchain-powered crowdfunding.
               Transparent, secure, and borderless.
             </p>
-            <div className="flex gap-4 justify-center">
+            <div className="flex flex-col sm:flex-row justify-center gap-4">
               <Link href="/campaigns/new">
-                <Button size="lg" className="bg-purple-600 hover:bg-purple-700">
+                <Button size="lg" className="w-full sm:w-auto bg-purple-600 hover:bg-purple-700">
                   Start a Campaign
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
@@ -39,7 +39,7 @@ export default function Home() {
                 <Button
                   size="lg"
                   variant="outline"
-                  className="border-purple-700 text-purple-700 hover:text-purple-700 dark:border-0 dark:bg-zinc-800 dark:text-white dark:hover:bg-zinc-700"
+                  className="w-full md:w-auto border-purple-700 text-purple-700 hover:text-purple-700 dark:border-0 dark:bg-zinc-800 dark:text-white dark:hover:bg-zinc-700"
                 >
                   Browse Campaigns
                 </Button>
@@ -48,13 +48,13 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="py-24 bg-white dark:bg-background">
+        <section className="py-24 px-4 bg-white dark:bg-background">
           <div className="max-w-6xl mx-auto">
             <h2 className="text-4xl font-bold text-center mb-16 dark:text-white">
               Why Choose Us?
             </h2>
             <div className="grid md:grid-cols-2 gap-8">
-              <Card className="p-6 dark:bg-zinc-900">
+              <Card className="md:p-6  dark:bg-zinc-900">
                 <CardContent className="pt-6">
                   <div className="mb-4 bg-purple-100 dark:bg-purple-900 p-3 rounded-full w-fit">
                     <Shield className="h-6 w-6 text-purple-600 dark:text-purple-400" />
@@ -69,7 +69,7 @@ export default function Home() {
                   </p>
                 </CardContent>
               </Card>
-              <Card className="p-6 dark:bg-zinc-900">
+              <Card className="md:p-6 dark:bg-zinc-900">
                 <CardContent className="pt-6">
                   <div className="mb-4 bg-purple-100 dark:bg-purple-900 p-3 rounded-full w-fit">
                     <Globe className="h-6 w-6 text-purple-600 dark:text-purple-400" />
@@ -83,7 +83,7 @@ export default function Home() {
                   </p>
                 </CardContent>
               </Card>
-              <Card className="p-6 dark:bg-zinc-900">
+              <Card className="md:p-6 dark:bg-zinc-900">
                 <CardContent className="pt-6">
                   <div className="mb-4 bg-purple-100 dark:bg-purple-900 p-3 rounded-full w-fit">
                     <Sparkles className="h-6 w-6 text-purple-600 dark:text-purple-400" />
@@ -97,7 +97,7 @@ export default function Home() {
                   </p>
                 </CardContent>
               </Card>
-              <Card className="p-6 dark:bg-zinc-900">
+              <Card className="md:p-6 dark:bg-zinc-900">
                 <CardContent className="pt-6">
                   <div className="mb-4 bg-purple-100 dark:bg-purple-900 p-3 rounded-full w-fit">
                     <Lock className="h-6 w-6 text-purple-600 dark:text-purple-400" />
